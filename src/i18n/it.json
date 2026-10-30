@@ -3,6 +3,7 @@
   "agentActivateActionWritten": "L'agente {{agentName}} verrà attivato dopo la distribuzione, nella sua ultima versione (versione {{version}} nel progetto): azione scritta in {{file}}.",
   "agentActiveVersionInDeployment": "La distribuzione contiene versioni di agente attive nella org di destinazione ({{versions}}): Salesforce rifiuta di modificare una versione di agente attiva. Aggiungi AiAgentDefinitionVersion a package-no-overwrite.xml, ad esempio con la pulizia autoAddAgentsDeploymentActions di hardis:work:save: {{docUrl}}",
   "agentDefinitionMissingInTargetOrg": "La org di destinazione non ha gli agenti {{agents}} e la distribuzione contiene solo la loro AiAgentDefinitionVersion: Salesforce rifiuta la prima distribuzione di un agente senza la sua AiAgentDefinition. Distribuisci anche la AiAgentDefinition, ad esempio con \"nodelta\" nel messaggio di commit: {{docUrl}}",
+  "agentReviewFileWritten": "{{file}} scritto: le pull request mostrano lì cosa è cambiato nell'agente.",
   "agentsDeploymentActionsNoAgentChanged": "Nessuna versione di agente Agentforce modificata: nessuna azione di distribuzione dell'agente da aggiungere.",
   "agentVersionsAddedToPackageNoOverwrite": "AiAgentDefinitionVersion aggiunto a {{file}}: le versioni di agente già presenti nella org di destinazione sono escluse dalla distribuzione.",
   "aHumanReadableLabelForExportConfig": "Un'etichetta leggibile che identificherà questa configurazione di esportazione",

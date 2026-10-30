@@ -3,6 +3,7 @@
   "agentActivateActionWritten": "Agent {{agentName}} wordt na de implementatie geactiveerd in zijn nieuwste versie (versie {{version}} in het project): actie geschreven in {{file}}.",
   "agentActiveVersionInDeployment": "De implementatie bevat agentversies die actief zijn in de doel-org ({{versions}}): Salesforce weigert een actieve agentversie te wijzigen. Voeg AiAgentDefinitionVersion toe aan package-no-overwrite.xml, bijvoorbeeld met de opschoning autoAddAgentsDeploymentActions van hardis:work:save: {{docUrl}}",
   "agentDefinitionMissingInTargetOrg": "De doel-org heeft de agents {{agents}} niet, en de implementatie bevat alleen hun AiAgentDefinitionVersion: Salesforce weigert de eerste implementatie van een agent zonder zijn AiAgentDefinition. Implementeer ook de AiAgentDefinition, bijvoorbeeld met \"nodelta\" in het commit-bericht: {{docUrl}}",
+  "agentReviewFileWritten": "{{file}} geschreven: pull requests tonen daar wat er in de agent is gewijzigd.",
   "agentsDeploymentActionsNoAgentChanged": "Geen Agentforce-agentversie gewijzigd: geen implementatieactie voor agents toe te voegen.",
   "agentVersionsAddedToPackageNoOverwrite": "AiAgentDefinitionVersion toegevoegd aan {{file}}: agentversies die de doel-org al heeft, worden niet geïmplementeerd.",
   "aHumanReadableLabelForExportConfig": "Een leesbaar label dat deze exportconfiguratie identificeert",

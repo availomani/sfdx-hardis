@@ -3,6 +3,7 @@
   "agentActivateActionWritten": "Agent {{agentName}} zostanie aktywowany po wdrożeniu w najnowszej wersji (wersja {{version}} w projekcie): akcja zapisana w {{file}}.",
   "agentActiveVersionInDeployment": "Wdrożenie zawiera wersje agentów aktywne w docelowej org ({{versions}}): Salesforce odrzuca edycję aktywnej wersji agenta. Należy dodać AiAgentDefinitionVersion do package-no-overwrite.xml, na przykład za pomocą czyszczenia autoAddAgentsDeploymentActions z hardis:work:save: {{docUrl}}",
   "agentDefinitionMissingInTargetOrg": "Docelowa org nie ma agentów {{agents}}, a wdrożenie zawiera tylko ich AiAgentDefinitionVersion: Salesforce odrzuca pierwsze wdrożenie agenta bez jego AiAgentDefinition. Należy wdrożyć również AiAgentDefinition, na przykład z \"nodelta\" w komunikacie commit: {{docUrl}}",
+  "agentReviewFileWritten": "Zapisano {{file}}: Pull Requesty pokazują tam, co zmieniło się w agencie.",
   "agentsDeploymentActionsNoAgentChanged": "Żadna wersja agenta Agentforce nie została zmieniona: brak akcji wdrożenia agenta do dodania.",
   "agentVersionsAddedToPackageNoOverwrite": "Dodano AiAgentDefinitionVersion do {{file}}: wersje agentów, które docelowa org już ma, są pomijane we wdrożeniu.",
   "aHumanReadableLabelForExportConfig": "Czytelna etykieta identyfikująca tę konfigurację eksportu",

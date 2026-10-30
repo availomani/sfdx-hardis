@@ -24,6 +24,7 @@ import {
   readAgentBotUsers,
   removeLegacyAgentEntries,
   resolveAgentVersion,
+  writeAgentReviewCopies,
 } from '../../../../common/utils/agentUtils.js';
 import { resolveDeployApiVersion } from '../../../../common/replacementRules/engine/ruleEngine.js';
 import { t } from '../../../../common/utils/i18n.js';
@@ -46,6 +47,7 @@ Key functionalities:
 - **Agent and version selection:** Lists the agents of the org and their versions with their status, and proposes the latest version.
 - **Retrieval with dependencies:** Retrieves the selected version and what it uses in the local project.
 - **package.xml update:** Adds every retrieved component to \`manifest/package.xml\`, always with the whole \`AiAgentDefinition\`: the first deployment of an agent to an org needs it.
+- **Copy for the review:** Copies the Agent Script of the retrieved version to \`agents/<Agent>/<Agent>.agent\`, a path that stays the same from one version to the next, so the Pull Request shows what changed in the agent. Creates \`agents/README.md\` and the \`.gitattributes\` lines that collapse the generated version files in Pull Requests. See [Review a change of an agent](${AGENT_DOC_URL}#review-a-change-of-an-agent).
 - **Migration from the format before API 68.0:** When \`manifest/package.xml\` still holds the agent as \`GenAiPlannerBundle\`, \`Bot\` or \`BotVersion\`, these entries are removed, and the command lists the old folders to delete.
 - **Running user warning:** A service agent runs as a user of its org (\`botUser\`). The command warns when the retrieved agent has one: add a replacement rule that writes the user of each org.
 - **Missing dependencies report:** Lists the custom objects, custom fields and Data 360 objects that the agent names and that the project does not hold. The CLI does not retrieve them: retrieve them yourself when the target org does not have them.
@@ -180,6 +182,12 @@ In agent mode:
     const added = await mergeIntoPackageXml(packageXmlFile, retrievedComponents);
     uxLog('action', this, c.cyan(t('agentComponentsAddedToPackageXml', { count: added.length, packageXml: path.relative(process.cwd(), packageXmlFile) })));
 
+    // A copy of the Agent Script at a path that does not change between versions, read in Pull Requests
+    const reviewFiles = await writeAgentReviewCopies([{ agentName: selected.agentName, version: selected.version }]);
+    for (const file of reviewFiles) {
+      uxLog('action', this, c.cyan(t('agentReviewFileWritten', { file })));
+    }
+
     // The same agent in the format before API 68.0 (GenAiPlannerBundle, Bot, BotVersion) is replaced
     const legacyEntries = (await findLegacyAgentEntries(packageXmlFile)).filter((entry) => entry.agentName.toLowerCase() === selected.agentName.toLowerCase());
     let legacyFolders: string[] = [];
@@ -222,6 +230,7 @@ In agent mode:
       botUsers: botUsers.map((item) => ({ ...item })),
       legacyEntriesRemoved: legacyEntries.map((entry) => ({ type: entry.type, name: entry.member })),
       legacyFoldersToDelete: legacyFolders,
+      reviewFiles,
     };
   }
 

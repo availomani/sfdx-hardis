@@ -68,6 +68,16 @@ Each org of the pipeline then gets the new version, which is activated, and Sale
 
 Keep the folders of the older versions and of their authoring bundles in the project. Deleting an authoring bundle from an org deletes the whole agent with all its versions, so a Pull Request that deletes one may generate a destructive change that removes the agent from the orgs. The warning about versions committed outside the project also reads them.
 
+### Review a change of an agent
+
+Salesforce gives each version its own name, so in a Pull Request a new version is only new files: `aiAgentDefinitionVersions/My_Agent#3` and `aiAuthoringBundles/My_Agent_3`. Comparing them with the previous version does not help either: for a one-line change in Agentforce Builder, the version file gets dozens of new generated ids, its actions in another order, and a new base64 agent graph.
+
+The readable source of a version is its Agent Script, the `.agent` file of its authoring bundle. [hardis:org:retrieve:agent](hardis/org/retrieve/agent.md) copies the script of the retrieved version to `agents/My_Agent/My_Agent.agent`, a path that stays the same from one version to the next. The diff of this file in the Pull Request is what changed in the agent. The [cleaning](#automate-it-at-each-user-story) refreshes the copy at each [hardis:work:save](hardis/work/save.md), for an agent retrieved another way.
+
+- `agents/` is outside the package directories: it is never deployed. Change the agent in Agentforce Builder, never in this copy.
+- `agents/README.md` explains this to the next reader. sfdx-hardis creates it once and never changes it.
+- `.gitattributes` gets two lines that mark the version folders and the authoring bundles as generated (`linguist-generated` for GitHub, `gitlab-generated` for GitLab): their files are collapsed in the Pull Request, and the copy is what reviewers read. Azure DevOps and Bitbucket show them as usual.
+
 !!! warning "Rule: commit agent versions in a developer sandbox only"
     Version numbers are given by the org where the version is committed. A version committed in Agentforce Builder of another org (integration, uat, production) takes a number that the next version of the developer sandbox takes again, and that version is then never deployed there: the org already has a version with this number. The deployment check and deployment jobs warn when the target org has versions of an agent that the project does not have.
 

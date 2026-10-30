@@ -127,6 +127,7 @@
   "agentRetrieveSourceApiVersionTooLow": "O projeto está na API {{apiVersion}} (sourceApiVersion do sfdx-project.json). Abaixo da API 68.0, o Salesforce não retorna nenhum arquivo de agente: defina sourceApiVersion e a versão do package.xml como 68.0 e execute o comando novamente. {{docUrl}}",
   "agentRetrieved": "Agente {{agentName}} versão {{version}} recuperado. Revise os arquivos e depois faça o commit.",
   "agentRetrieveRequiresApi68": "A org {{org}} está na API {{apiVersion}}. Recuperar um agente com suas dependências exige a API 68.0 ou superior. Para continuar usando Bot, BotVersion e AiAuthoringBundle, use a API 67.0: {{docUrl}}",
+  "agentReviewFileWritten": "{{file}} gravado: os Pull Requests mostram ali o que mudou no agente.",
   "agentRunningUserCreating": "Criando o usuário de execução do agente {{agentName}} na org de destino (sf org create agent-user)...",
   "agentRunningUserCreationFailed": "Não foi possível criar o usuário de execução do agente {{agentName}}: {{message}}. O nome de usuário do git é implantado, e a ativação do agente vai falhar.",
   "agentRunningUserOrgUnreachable": "Org de destino inacessível: os usuários de execução dos agentes não são verificados.",

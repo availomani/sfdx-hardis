@@ -3,6 +3,7 @@
   "agentActivateActionWritten": "エージェント {{agentName}} はデプロイ後に最新バージョンで有効化されます (プロジェクトのバージョン {{version}}): アクションを {{file}} に書き込みました。",
   "agentActiveVersionInDeployment": "デプロイには、対象の org で有効なエージェントバージョン ({{versions}}) が含まれています: Salesforce は有効なエージェントバージョンの編集を拒否します。AiAgentDefinitionVersion を package-no-overwrite.xml に追加してください (例: hardis:work:save のクリーニング autoAddAgentsDeploymentActions を使用): {{docUrl}}",
   "agentDefinitionMissingInTargetOrg": "対象の org にはエージェント {{agents}} がなく、デプロイにはその AiAgentDefinitionVersion のみが含まれています: Salesforce は AiAgentDefinition のないエージェントの初回デプロイを拒否します。AiAgentDefinition もデプロイしてください (例: commit メッセージに \"nodelta\" を含める): {{docUrl}}",
+  "agentReviewFileWritten": "{{file}} を書き込みました: Pull Request では、ここでエージェントの変更内容が表示されます。",
   "agentsDeploymentActionsNoAgentChanged": "Agentforce エージェントのバージョンに変更はありません: 追加するエージェントのデプロイアクションはありません。",
   "agentVersionsAddedToPackageNoOverwrite": "AiAgentDefinitionVersion を {{file}} に追加しました: 対象の org に既にあるエージェントバージョンはデプロイから除外されます。",
   "aHumanReadableLabelForExportConfig": "このエクスポート設定を識別するための分かりやすいラベル",

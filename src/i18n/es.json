@@ -3,6 +3,7 @@
   "agentActivateActionWritten": "El agente {{agentName}} se activará tras el despliegue, en su última versión (versión {{version}} en el proyecto): acción escrita en {{file}}.",
   "agentActiveVersionInDeployment": "El despliegue contiene versiones de agente activas en la org de destino ({{versions}}): Salesforce rechaza modificar una versión de agente activa. Añade AiAgentDefinitionVersion a package-no-overwrite.xml, por ejemplo con la limpieza autoAddAgentsDeploymentActions de hardis:work:save: {{docUrl}}",
   "agentDefinitionMissingInTargetOrg": "La org de destino no tiene los agentes {{agents}} y el despliegue solo contiene su AiAgentDefinitionVersion: Salesforce rechaza el primer despliegue de un agente sin su AiAgentDefinition. Despliega también la AiAgentDefinition, por ejemplo con \"nodelta\" en el mensaje de commit: {{docUrl}}",
+  "agentReviewFileWritten": "{{file}} escrito: las Pull Requests muestran ahí lo que ha cambiado en el agente.",
   "agentsDeploymentActionsNoAgentChanged": "Ninguna versión de agente de Agentforce ha cambiado: no hay acción de despliegue de agente que añadir.",
   "agentVersionsAddedToPackageNoOverwrite": "AiAgentDefinitionVersion añadido a {{file}}: las versiones de agente que la org de destino ya tiene quedan fuera del despliegue.",
   "aHumanReadableLabelForExportConfig": "Una etiqueta legible que identificará esta configuración de exportación",

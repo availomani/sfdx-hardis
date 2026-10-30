@@ -14,6 +14,7 @@ import {
   listLocalAgentLatestVersions,
   listPackageNoOverwriteFiles,
   upsertAgentActivateAction,
+  writeAgentReviewCopies,
 } from '../../../../common/utils/agentUtils.js';
 import { CONSTANTS } from '../../../../config/index.js';
 
@@ -32,6 +33,7 @@ A deployed agent version is inactive, and Salesforce refuses a deployment that h
 
 - **Activation:** for each agent with an \`AiAgentDefinitionVersion\` changed in the User Story, an \`agent-activate\` post-deployment action of the Pull Request activates its latest version (\`agentVersion: latest\`). The label names the version of the project when the User Story was saved. When several Pull Requests are deployed together, their actions for the same agent are the same action and run once, so the order of the Pull Requests does not matter. An action that already activates this agent is updated.
 - **Versions already in the target org:** \`AiAgentDefinitionVersion\` is added to \`manifest/package-no-overwrite.xml\` and to every file of \`packageNoOverwritePath\` in the project and branch configs, so only the new versions are deployed. Like for any item of package-no-overwrite.xml, a deployment that holds an agent version then lists the content of the target org, which can take a few minutes on a large org.
+- **Copy for the review:** the Agent Script of that version is copied to \`agents/<Agent>/<Agent>.agent\`, as [hardis:org:retrieve:agent](${CONSTANTS.DOC_URL_ROOT}/hardis/org/retrieve/agent/) does, for an agent retrieved another way: the Pull Request shows what changed in the agent there.
 - **Automatic cleaning:** Add \`autoAddAgentsDeploymentActions\` to \`autoCleanTypes\` in \`.sfdx-hardis.yml\` to run it each time a User Story is saved with [hardis:work:save](${CONSTANTS.DOC_URL_ROOT}/hardis/work/save/).
 
 See [Agentforce agents in CI/CD](${AGENT_DOC_URL}).
@@ -101,6 +103,10 @@ The command has no prompt: \`--agent\` only exists for consistency with the othe
       if (await ensureAgentVersionsInPackageNoOverwrite(packageNoOverwrite)) {
         uxLog("action", this, c.cyan(t('agentVersionsAddedToPackageNoOverwrite', { file: packageNoOverwrite })));
       }
+    }
+
+    for (const file of await writeAgentReviewCopies(versions)) {
+      uxLog("action", this, c.cyan(t('agentReviewFileWritten', { file })));
     }
 
     const prId = await resolvePrId(this, 'current', true);

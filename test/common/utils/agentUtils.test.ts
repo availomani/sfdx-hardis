@@ -19,6 +19,7 @@ import {
   removeLegacyAgentEntries,
   parseAgentVersionFullName,
   resolveAgentVersion,
+  writeAgentReviewCopies,
 } from '../../../src/common/utils/agentUtils.js';
 import { parsePackageXmlFile } from '../../../src/common/utils/xmlUtils.js';
 
@@ -635,5 +636,55 @@ describe('agentUtils.findMissingAgentReferences', () => {
       'CustomObject:Invoice__c',
     ]);
     expect(missing[0].referencedBy).to.equal('force-app/main/default/aiAgentDefinitionVersions/My_Agent_2.xml');
+  });
+});
+
+describe('agentUtils.writeAgentReviewCopies', () => {
+  let tmpDir: string;
+
+  beforeEach(() => {
+    tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'agent-review-'));
+  });
+
+  afterEach(async () => {
+    await fs.remove(tmpDir);
+  });
+
+  async function writeBundle(bundleName: string, target: string, script: string): Promise<void> {
+    const folder = path.join(tmpDir, 'force-app', 'main', 'default', 'aiAuthoringBundles', bundleName);
+    await fs.ensureDir(folder);
+    await fs.writeFile(path.join(folder, `${bundleName}.bundle-meta.xml`), `<AiAuthoringBundle>\n    <bundleType>AGENT</bundleType>\n    <target>${target}</target>\n</AiAuthoringBundle>\n`);
+    await fs.writeFile(path.join(folder, `${bundleName}.agent`), script);
+  }
+
+  it('copies the script of the requested version to a path that does not change, with the README and .gitattributes', async () => {
+    await writeBundle('My_Agent_1', 'My_Agent.v1', 'description: "one"\n');
+    await writeBundle('My_Agent_2', 'My_Agent.v2', 'description: "two"\n');
+    await fs.writeFile(path.join(tmpDir, '.gitattributes'), '*.cls text');
+    const written = await writeAgentReviewCopies([{ agentName: 'My_Agent', version: 2 }], tmpDir);
+    expect(written).to.deep.equal([path.join('agents', 'My_Agent', 'My_Agent.agent'), path.join('agents', 'README.md'), '.gitattributes']);
+    expect(await fs.readFile(path.join(tmpDir, 'agents', 'My_Agent', 'My_Agent.agent'), 'utf8')).to.equal('description: "two"\n');
+    const attributes = await fs.readFile(path.join(tmpDir, '.gitattributes'), 'utf8');
+    expect(attributes.startsWith('*.cls text\n# Agent files')).to.equal(true);
+    expect(attributes).to.contain('**/aiAgentDefinitionVersions/** linguist-generated=true gitlab-generated=true\n');
+  });
+
+  it('writes nothing the second time, and only the copy for a new version', async () => {
+    await writeBundle('My_Agent_2', 'My_Agent.v2', 'description: "two"\n');
+    await writeAgentReviewCopies([{ agentName: 'My_Agent', version: 2 }], tmpDir);
+    expect(await writeAgentReviewCopies([{ agentName: 'My_Agent', version: 2 }], tmpDir)).to.deep.equal([]);
+    await writeBundle('My_Agent_3', 'My_Agent.v3', 'description: "three"\n');
+    expect(await writeAgentReviewCopies([{ agentName: 'My_Agent', version: 3 }], tmpDir)).to.deep.equal([path.join('agents', 'My_Agent', 'My_Agent.agent')]);
+    const attributes = await fs.readFile(path.join(tmpDir, '.gitattributes'), 'utf8');
+    expect(attributes.match(/# Agent files/g)).to.have.length(1);
+  });
+
+  it('keeps a README written by the project, and skips an agent without the bundle of the version', async () => {
+    await writeBundle('My_Agent_2', 'My_Agent.v2', 'description: "two"\n');
+    await fs.ensureDir(path.join(tmpDir, 'agents'));
+    await fs.writeFile(path.join(tmpDir, 'agents', 'README.md'), 'Our own text');
+    const written = await writeAgentReviewCopies([{ agentName: 'My_Agent', version: 2 }, { agentName: 'Other_Agent', version: 1 }], tmpDir);
+    expect(written).to.deep.equal([path.join('agents', 'My_Agent', 'My_Agent.agent'), '.gitattributes']);
+    expect(await fs.readFile(path.join(tmpDir, 'agents', 'README.md'), 'utf8')).to.equal('Our own text');
   });
 });
